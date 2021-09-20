@@ -18,7 +18,6 @@ const RNAFastImage: React.FC<Props> = ({uri, index, title}:Props) => {
                 style={{ flex:1 }}
                 source={{
                     uri: uri,
-                    headers: { Authorization: 'someAuthToken' },
                     priority: FastImage.priority.normal,
                     cache:'immutable',
                 }}

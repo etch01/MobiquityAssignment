@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator } from 'react-native';
 import SearchBar from '../Components/searchBar';
 import Image from '../Components/fastImage';
+import {Requests} from '../Network/requests';
 const {width,height} = Dimensions.get('window');
 
 const Home =() => {
@@ -10,6 +11,15 @@ const Home =() => {
     const updateSearch =(text:string):void=>{
         setSearch(text)        
     }
+
+    const searchImage = () =>{
+        const req = new Requests();
+        req.getImages('kitten')
+    }
+
+    useEffect(()=>{
+        searchImage();
+    },[])
 
     const _keyExtractor = (item:any,index:number) => item;
 
