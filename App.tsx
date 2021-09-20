@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+ // App is too simple im not gonna use redux xD
 import React from 'react';
 import type {Node} from 'react';
 import {
