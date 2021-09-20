@@ -1,6 +1,7 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image'
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import {truncateString} from '../Helpers/truncateString';
 
 const {width,height} = Dimensions.get('window');
 
@@ -20,10 +21,13 @@ const RNAFastImage: React.FC<Props> = ({uri, index, title}:Props) => {
                     uri: uri,
                     priority: FastImage.priority.normal,
                     cache:'immutable',
+                    headers: {
+                        'Content-Type': 'image/jpeg',
+                      },
                 }}
                 resizeMode={FastImage.resizeMode.cover}
             />
-            <Text style={styles.title}>Title</Text>
+            <Text style={styles.title}>{truncateString(title,20)}</Text>
         </View>
     )
 }
@@ -36,11 +40,13 @@ const styles = StyleSheet.create({
         width:width /2.2,
         alignSelf:'center',
         marginLeft:5,
-        marginRight:5
+        marginRight:5,
+        marginTop:height*0.01
     },
     title:{
         textAlign:'center',
-        fontSize:16,
+        fontSize:12,
         marginTop: height*0.01,
+        flexWrap:'wrap'
     }
 });
