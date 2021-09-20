@@ -3,14 +3,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
 type Props = {
-    onChangeText: ()=> void;
+    onChangeText: (text:string)=> void;
     value:string;
 }
 
 const SearchInput: React.FC<Props> = ({onChangeText,value}:Props) => {
 
     return (
-        <View style={styles.container}>
+        <View>
             <SearchBar
                 placeholder='Search Images...'
                 onChangeText={onChangeText}
@@ -24,9 +24,6 @@ const SearchInput: React.FC<Props> = ({onChangeText,value}:Props) => {
 export default SearchInput;
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1
-    },
     searchBarContainer:{
         backgroundColor: '#fff',
         borderWidth: 0, 
