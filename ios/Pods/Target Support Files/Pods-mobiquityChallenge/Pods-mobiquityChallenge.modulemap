@@ -1,0 +1,6 @@
+module Pods_mobiquityChallenge {
+  umbrella header "Pods-mobiquityChallenge-umbrella.h"
+
+  export *
+  module * { export * }
+}
