@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import SearchBar from '../Components/searchBar';
 
-const Home: React.FC<null> =() => {
+const Home =() => {
+    const [search,setSearch] = useState<string>('');
+
+    const updateSearch =(text:string):void=>{
+        setSearch(text)        
+    }
+
     return (
-        <View>
-            <Text></Text>
+        <View style={styles.container}>
+            <SearchBar value={search} onChangeText={updateSearch}/>
         </View>
     )
 }
@@ -12,5 +19,7 @@ const Home: React.FC<null> =() => {
 export default Home;
 
 const styles = StyleSheet.create({
-
+    container:{
+        flex:1,
+    },
 });

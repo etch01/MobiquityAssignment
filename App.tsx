@@ -17,18 +17,20 @@ import {
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
+import Home from './src/Screens/Home';
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : '#fff',
+    flex:1,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
- 
+      <Home/>
     </SafeAreaView>
   );
 };
