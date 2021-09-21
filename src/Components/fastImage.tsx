@@ -12,13 +12,13 @@ type Props = {
 }
 
 const RNAFastImage: React.FC<Props> = ({uri, index, title}:Props) => {
-
+    console.log('URI:',uri)
     return (
         <View style={styles.container}>
             <FastImage
                 style={{ flex:1 }}
                 source={{
-                    uri: uri,
+                    uri,
                     priority: FastImage.priority.normal,
                     cache:'immutable',
                     headers: {
