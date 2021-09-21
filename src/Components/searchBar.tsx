@@ -1,18 +1,22 @@
 import React from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import SearchHistory from './searchHistory';
 
 type Props = {
     onChangeText: (text:string)=> void;
     doSearch:()=> void;
     value:string;
     loading: boolean;
+    searchValues?:Array<string>;
+    updateSearchBarValue: (value:string)=>void;
+    searchHistoryVisibility:boolean;
 }
 
-const SearchInput: React.FC<Props> = ({onChangeText,value,doSearch,loading}:Props) => {
+const SearchInput: React.FC<Props> = ({onChangeText,value,doSearch,loading,searchValues,updateSearchBarValue,searchHistoryVisibility}:Props) => {
 
     return (
-        <View>
+        <View style={{zIndex:1}}>
             <SearchBar
             showLoading={loading}
                 placeholder='Search Images...'
@@ -23,6 +27,7 @@ const SearchInput: React.FC<Props> = ({onChangeText,value,doSearch,loading}:Prop
                 loadingProps={{size:20,color:'#fff'}}
                 returnKeyType='search'
             />
+            <SearchHistory updateSearchBarValue={(value)=>updateSearchBarValue(value)} searchValues={searchValues} visible={searchHistoryVisibility}/>
         </View>
     )
 }
@@ -35,6 +40,6 @@ const styles = StyleSheet.create({
         borderWidth: 0, 
         shadowColor: '#fff',
         borderBottomColor: 'transparent',
-        borderTopColor: 'transparent'
+        borderTopColor: 'transparent',
     }
 });

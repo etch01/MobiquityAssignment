@@ -1,9 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator } from 'react-native';
-import SearchBar from '../Components/searchBar';
-import Image from '../Components/fastImage';
+import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import {Requests} from '../Network/requests';
 import {Photos} from '../Models/photos';
+import SearchBar from '../Components/searchBar';
+import Image from '../Components/fastImage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SearchHistory from '../Components/searchHistory';
+
 const {width,height} = Dimensions.get('window');
 
 const Home =() => {
@@ -14,6 +17,9 @@ const Home =() => {
     const [paging,setPaging] = useState<boolean>(false);
     const [pagingEnded,setPagingEnded] = useState<boolean>(false);
     const [error,setError] = useState<string>('');
+    const [searchHistory,setSearchHistory] = useState <Array<string>>([]);
+    const [filteredSearchHistory,setFilteredSearchHistory] = useState <Array<string>>([]);
+    const [searchHistoryVisibility,setSearchHistoryVisibility] = useState<boolean>(false);
 
     const flatlistRef: any = useRef();
 
@@ -25,6 +31,7 @@ const Home =() => {
     const searchImage = ():void =>{
         const req = new Requests();
         setLoading(true);
+        setSearchHistoryVisibility(false);
         req.getImages(search,page,({error,data})=>{
             if (data?.stat == 'ok'){
                 if (data.photos.photo.length == 0){
@@ -32,6 +39,7 @@ const Home =() => {
                     setError('No Image');
                 }else{
                     setImages(data.photos.photo);
+                    storeSearchResult(search);
                     //Scroll to the top of the flatlist on search
                     flatlistRef.current?.scrollToIndex({ animated: true, index: 0 })
                 }
@@ -71,11 +79,69 @@ const Home =() => {
         });
     }
 
+    //Remove Duplicates from history array
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+      }
+
+    const storeSearchResult = async (value:string) =>{
+        try {
+            //get old search values
+            const jsonOldValues = await AsyncStorage.getItem('@search_value')
+            if (jsonOldValues !== null){
+                let newValues = JSON.parse(jsonOldValues)
+                newValues.push(value);
+                var unique = newValues.filter(onlyUnique)
+                await AsyncStorage.setItem('@search_value', JSON.stringify(unique))
+
+            }else{
+                const jsonValue = JSON.stringify([search])
+                await AsyncStorage.setItem('@search_value', jsonValue)
+                
+            }
+          } catch (e) {
+            console.log(e);
+          }
+    }
+
+    const getHistoryFromStorage = async() =>{
+        const history = await AsyncStorage.getItem('@search_value');
+        if (history !== null){
+            setSearchHistory(JSON.parse(history))
+        }        
+    }
+
+    const filterSearchHistory = () =>{
+        const filter = searchHistory.filter(substring=>substring.indexOf(search) > -1)        
+        setFilteredSearchHistory(filter);
+    }
+
+    //Updates children every time history updated
+    useEffect(()=>{
+        getHistoryFromStorage();
+    },[searchHistory])
+
+    //shows or hides and modifies history section every time search value changes
+    useEffect(()=>{
+        if (search.length > 0){
+            setSearchHistoryVisibility(true);
+            filterSearchHistory(); 
+        }else{
+            setSearchHistoryVisibility(false);
+        }
+    },[search])
+
     const _keyExtractor = (item:any,index:number) => item.id;
 
     return (
         <View style={styles.container}>
-            <SearchBar loading={loading} doSearch={searchImage} value={search} onChangeText={updateSearch}/>
+                <SearchBar searchValues={filteredSearchHistory || searchHistory} 
+                loading={loading} 
+                doSearch={searchImage} 
+                value={search} 
+                onChangeText={updateSearch}
+                updateSearchBarValue={(val)=>setSearch(val)}
+                searchHistoryVisibility={searchHistoryVisibility}/>
             <View style={{width:width*0.95,alignSelf:'center',flex:1}}>
                 <FlatList  
                         data={images}  
