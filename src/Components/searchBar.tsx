@@ -6,18 +6,22 @@ type Props = {
     onChangeText: (text:string)=> void;
     doSearch:()=> void;
     value:string;
+    loading: boolean;
 }
 
-const SearchInput: React.FC<Props> = ({onChangeText,value,doSearch}:Props) => {
+const SearchInput: React.FC<Props> = ({onChangeText,value,doSearch,loading}:Props) => {
 
     return (
         <View>
             <SearchBar
+            showLoading={loading}
                 placeholder='Search Images...'
                 onChangeText={onChangeText}
                 value={value}
                 containerStyle={styles.searchBarContainer}
                 onSubmitEditing={doSearch}
+                loadingProps={{size:20,color:'#fff'}}
+                returnKeyType='search'
             />
         </View>
     )

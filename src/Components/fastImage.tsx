@@ -12,7 +12,6 @@ type Props = {
 }
 
 const RNAFastImage: React.FC<Props> = ({uri, index, title}:Props) => {
-    console.log('URI:',uri)
     return (
         <View style={styles.container}>
             <FastImage
