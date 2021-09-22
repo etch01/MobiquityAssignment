@@ -140,10 +140,13 @@ const Home =() => {
                 doSearch={searchImage} 
                 value={search} 
                 onChangeText={updateSearch}
-                updateSearchBarValue={(val)=>setSearch(val)}
+                updateSearchBarValue={(val)=>{
+                    setSearch(val)
+                    setSearchHistoryVisibility(false)
+                }}
                 searchHistoryVisibility={searchHistoryVisibility}/>
             <View style={{width:width*0.95,alignSelf:'center',flex:1}}>
-                <FlatList  
+                {images?.length > 0 ?<FlatList  
                         data={images}  
                         renderItem={({item,index}) =>{                            
                         return <Image index={index} title={item.title} uri={`https://farm${item.farm}.static.flickr.com/${item.server}/${item.id}_${item.secret}.jpg`}/>
@@ -163,7 +166,7 @@ const Home =() => {
                               : null}
                             </>
                           )}
-                    />
+                    />:null}
             </View>
         </View>
     )
