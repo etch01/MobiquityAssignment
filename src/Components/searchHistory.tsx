@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Dimensions, Text, TouchableOpacity, FlatList } from 'react-native';
+import {Photo} from '../Models/photos'
 
 const {width,height} = Dimensions.get('window');
 
@@ -11,7 +12,7 @@ type Props = {
 
 const SearchHistory: React.FC<Props> = ({visible,searchValues,updateSearchBarValue}:Props) => {
 
-    const _keyExtractor = (item:any) => item;
+    const _keyExtractor = (item:string) => item;
 
     return (
         <View style={[styles.historyContainer,{width:visible?width*0.955:0}]}>

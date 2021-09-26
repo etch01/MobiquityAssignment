@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator} from 'react-native';
 import {Requests} from '../Network/requests';
 import {Photo} from '../Models/photos';
+import {onlyUnique} from '../Helpers/removeDuplicates';
 import SearchBar from '../Components/searchBar';
 import Image from '../Components/fastImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,7 +21,7 @@ const Home =() => {
     const [filteredSearchHistory,setFilteredSearchHistory] = useState <Array<string>>([]);
     const [searchHistoryVisibility,setSearchHistoryVisibility] = useState<boolean>(false);
 
-    const flatlistRef: any = useRef();
+    const flatlistRef = useRef<FlatList|null>(null);
 
     //collect search text from search input
     const updateSearch =(text:string):void=>{
@@ -33,7 +34,7 @@ const Home =() => {
         setSearchHistoryVisibility(false);
         req.getImages(search,page,({error,data}:any)=>{
             if (data?.stat == 'ok'){
-                if (data.photos.photo.length == 0){
+                if (data?.photos.photo.length == 0){
                     setImages(data.photos.photo);
                     setError('No Image');
                 }else{
@@ -77,11 +78,6 @@ const Home =() => {
             setLoading(false);
         });
     }
-
-    //Remove Duplicates from history array
-    function onlyUnique(value:any, index:number, self:any) {
-        return self.indexOf(value) === index;
-      }
 
     const storeSearchResult = async (value:string) =>{
         try {
@@ -130,7 +126,7 @@ const Home =() => {
         }
     },[search])
 
-    const _keyExtractor = (item:any) => item.id;
+    const _keyExtractor = (item:Photo) => item.id;
 
     return (
         <View style={styles.container}>
