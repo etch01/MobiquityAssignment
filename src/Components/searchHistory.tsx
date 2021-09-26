@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, Dimensions, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { StyleSheet, View, Dimensions, Text, TouchableOpacity, FlatList } from 'react-native';
+
 const {width,height} = Dimensions.get('window');
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 const SearchHistory: React.FC<Props> = ({visible,searchValues,updateSearchBarValue}:Props) => {
 
-    const _keyExtractor = (item:any,index:number) => item;
+    const _keyExtractor = (item:any) => item;
 
     return (
         <View style={[styles.historyContainer,{width:visible?width*0.955:0}]}>
@@ -19,7 +19,7 @@ const SearchHistory: React.FC<Props> = ({visible,searchValues,updateSearchBarVal
                 data={searchValues}
                 keyExtractor={_keyExtractor}
                 style={styles.scroll}
-                renderItem={({item,index}) =>{                            
+                renderItem={({item}) =>{                            
                     return (
                         <TouchableOpacity style={styles.searchItemContainer} onPress={()=>updateSearchBarValue(item)}>
                             <Text style={styles.historyItem}>{item}</Text>

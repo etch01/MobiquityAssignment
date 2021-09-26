@@ -1,17 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, FlatList, View, Dimensions, ActivityIndicator} from 'react-native';
 import {Requests} from '../Network/requests';
-import {Photos} from '../Models/photos';
+import {Photo} from '../Models/photos';
 import SearchBar from '../Components/searchBar';
 import Image from '../Components/fastImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SearchHistory from '../Components/searchHistory';
 
 const {width,height} = Dimensions.get('window');
 
 const Home =() => {
     const [search,setSearch] = useState<string>('');
-    const [images,setImages] = useState<Photos>();
+    const [images,setImages] = useState<Array<Photo>>();
     const [loading,setLoading] = useState<boolean>(false);
     const [page,setPage] = useState<number>(1);
     const [paging,setPaging] = useState<boolean>(false);
@@ -25,14 +24,14 @@ const Home =() => {
 
     //collect search text from search input
     const updateSearch =(text:string):void=>{
-        setSearch(text)        
+            setSearch(text)        
     }
 
     const searchImage = ():void =>{
         const req = new Requests();
         setLoading(true);
         setSearchHistoryVisibility(false);
-        req.getImages(search,page,({error,data})=>{
+        req.getImages(search,page,({error,data}:any)=>{
             if (data?.stat == 'ok'){
                 if (data.photos.photo.length == 0){
                     setImages(data.photos.photo);
@@ -59,14 +58,14 @@ const Home =() => {
         const req = new Requests();
         setLoading(true);
         setPage(prevPage=> prevPage +1);
-        req.getImages(search,page+1,({error,data})=>{
+        req.getImages(search,page+1,({error,data}:any)=>{
             if (data?.stat == 'ok'){
                 if (data.photos.photo.length == 0){
                     setPagingEnded(true);
                     setError('No Image');
                 }else{
                     //merge previous page images with the new page ones
-                    const firstPageImages: Photos = images?.concat(data.photos.photo);
+                    const firstPageImages: Array<Photo> = images ? images?.concat(data.photos.photo): [];
                     setImages(firstPageImages);
                 }
             }else{
@@ -80,7 +79,7 @@ const Home =() => {
     }
 
     //Remove Duplicates from history array
-    function onlyUnique(value, index, self) {
+    function onlyUnique(value:any, index:number, self:any) {
         return self.indexOf(value) === index;
       }
 
@@ -131,7 +130,7 @@ const Home =() => {
         }
     },[search])
 
-    const _keyExtractor = (item:any,index:number) => item.id;
+    const _keyExtractor = (item:any) => item.id;
 
     return (
         <View style={styles.container}>
@@ -146,7 +145,7 @@ const Home =() => {
                 }}
                 searchHistoryVisibility={searchHistoryVisibility}/>
             <View style={{width:width*0.95,alignSelf:'center',flex:1}}>
-                {images?.length > 0 ?<FlatList  
+                <FlatList  
                         data={images}  
                         renderItem={({item,index}) =>{                            
                         return <Image index={index} title={item.title} uri={`https://farm${item.farm}.static.flickr.com/${item.server}/${item.id}_${item.secret}.jpg`}/>
@@ -166,7 +165,7 @@ const Home =() => {
                               : null}
                             </>
                           )}
-                    />:null}
+                    />
             </View>
         </View>
     )

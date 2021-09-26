@@ -11,7 +11,7 @@ type Props = {
     index:number;
 }
 
-const RNAFastImage: React.FC<Props> = ({uri, index, title}:Props) => {
+const RNAFastImage: React.FC<Props> = ({uri, title}:Props) => {
     return (
         <View style={styles.container}>
             <FastImage

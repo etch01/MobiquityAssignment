@@ -1,10 +1,10 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import {  StyleSheet, View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import SearchHistory from './searchHistory';
 
 type Props = {
-    onChangeText: (text:string)=> void;
+    onChangeText: ((text: string) => void) | undefined;
     doSearch:()=> void;
     value:string;
     loading: boolean;
