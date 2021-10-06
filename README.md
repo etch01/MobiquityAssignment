@@ -1,7 +1,7 @@
-# MobiquityAssignment
+## MobiquityAssignment
 An app that uses the Flickr image search API and shows the results in a two column scrollable view
 
-#Run:
+## Run:
 
 1-clone the app
 
@@ -11,7 +11,7 @@ An app that uses the Flickr image search API and shows the results in a two colu
 
 4- react-native run-android or react-native run-ios
 
-#Build :
+## Build :
 
 1-in terminal's root project
 
